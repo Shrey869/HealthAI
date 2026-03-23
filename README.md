@@ -173,11 +173,7 @@ Copy `.env.example` to `.env` and fill in the following:
 
 ---
 
-## 📸 Screenshots
 
-> The application features a modern **glassmorphism 3D UI** with smooth animations, dark mode support, and a fully responsive design.
-
----
 
 ## 👨‍💻 Team
 
