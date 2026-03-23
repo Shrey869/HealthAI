@@ -1,0 +1,9 @@
+Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent: [403 Forbidden] Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.
+
+Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent: [403 Forbidden] Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.
+    at handleResponseNotOk (C:\Users\saxen\Downloads\b_PQ6V1agA3Nk-1773405219650\node_modules\@google\generative-ai\dist\index.js:434:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async makeRequest (C:\Users\saxen\Downloads\b_PQ6V1agA3Nk-1773405219650\node_modules\@google\generative-ai\dist\index.js:403:9)
+    at async generateContent (C:\Users\saxen\Downloads\b_PQ6V1agA3Nk-1773405219650\node_modules\@google\generative-ai\dist\index.js:867:22)
+    at async analyzeSymptoms (C:\Users\saxen\Downloads\b_PQ6V1agA3Nk-1773405219650\lib\ai.ts:51:20)
+    at async main (C:\Users\saxen\Downloads\b_PQ6V1agA3Nk-1773405219650\test-ai.ts:11:17)

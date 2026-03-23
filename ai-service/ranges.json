@@ -1,0 +1,30 @@
+{
+  "Hemoglobin": { "min": 13, "max": 17, "unit": "g/dL" },
+  "RBC": { "min": 4.7, "max": 6.1, "unit": "million cells/mcL" },
+  "WBC": { "min": 4000, "max": 10000, "unit": "cells/mcL" },
+  "Platelets": { "min": 150000, "max": 450000, "unit": "cells/mcL" },
+
+  "Fasting Glucose": { "min": 70, "max": 99, "unit": "mg/dL" },
+  "HbA1c": { "min": 4.0, "max": 5.6, "unit": "%" },
+
+  "Total Cholesterol": { "min": 125, "max": 200, "unit": "mg/dL" },
+  "LDL": { "min": 0, "max": 100, "unit": "mg/dL" },
+  "HDL": { "min": 40, "max": 60, "unit": "mg/dL" },
+
+  "Creatinine": { "min": 0.7, "max": 1.3, "unit": "mg/dL" },
+  "Urea": { "min": 7, "max": 20, "unit": "mg/dL" },
+
+  "ALT": { "min": 7, "max": 56, "unit": "U/L" },
+  "AST": { "min": 10, "max": 40, "unit": "U/L" },
+  "Bilirubin": { "min": 0.1, "max": 1.2, "unit": "mg/dL" },
+
+  "Sodium": { "min": 135, "max": 145, "unit": "mEq/L" },
+  "Potassium": { "min": 3.5, "max": 5.0, "unit": "mEq/L" },
+
+  "TSH": { "min": 0.4, "max": 4.0, "unit": "mIU/L" },
+  
+  "Troponin I": { "min": 0.0, "max": 0.04, "unit": "ng/mL" },
+  "BNP": { "min": 0, "max": 100, "unit": "pg/mL" },
+  "CK-MB": { "min": 0, "max": 5.0, "unit": "ng/mL" },
+  "Uric Acid": { "min": 3.5, "max": 7.2, "unit": "mg/dL" }
+}
