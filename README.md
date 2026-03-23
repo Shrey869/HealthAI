@@ -181,7 +181,7 @@ Copy `.env.example` to `.env` and fill in the following:
 
 ## 👨‍💻 Team
 
-Built with ❤️ for **[Hackathon Name]** by **Shreyansh Saxena**
+Built with ❤️ for **CodeCure — AI Hackathon** by **Team Syntax Squad** (Shreyansh Saxena)
 
 ---
 
