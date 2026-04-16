@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     // Count diagnoses by month for the chart
     const monthlyDiagnoses: Record<string, number> = {}
-    allDiagnoses.forEach((d) => {
+    allDiagnoses.forEach((d: { createdAt: Date }) => {
       const month = d.createdAt.toLocaleString("default", { month: "short" })
       monthlyDiagnoses[month] = (monthlyDiagnoses[month] || 0) + 1
     })
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         healthScore: Math.min(95, 70 + totalDiagnoses * 2), // Simple score based on usage
       },
       recentDiagnoses,
-      savedPharmacies: savedPharmacies.map((sp) => sp.pharmacy),
+      savedPharmacies: savedPharmacies.map((sp: { pharmacy: unknown }) => sp.pharmacy),
       monthlyDiagnoses,
     })
   } catch (error) {

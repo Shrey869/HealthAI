@@ -117,7 +117,7 @@ export default function ReportResult({ data, onReset }: { data: any, onReset: ()
               ))}
               {reportData.length === 0 && (
                 <tr>
-                  <td colSpan="4" className="py-8 text-center text-slate-500">No parameters extracted from the report.</td>
+                  <td colSpan={4} className="py-8 text-center text-slate-500">No parameters extracted from the report.</td>
                 </tr>
               )}
             </tbody>

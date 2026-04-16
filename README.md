@@ -1,192 +1,77 @@
-<div align="center">
+# HealthAI
 
-# 🩺 HealthAI — AI-Powered Healthcare Assistant
-
-**Your intelligent health companion: Diagnose symptoms, analyze lab reports, and locate nearby medical stores — all in one place.**
-
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
-[![Python](https://img.shields.io/badge/Python-FastAPI-green?logo=python)](https://fastapi.tiangolo.com)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-
-[Live Demo](#) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Setup](#-getting-started)
-
-</div>
-
----
-
-## 🚨 The Problem We're Solving
-
-Every day in India:
-- **~65% of rural patients** self-medicate without proper guidance due to lack of accessible doctors.
-- People upload blood reports but **don't know what the values mean** — is Hemoglobin 8.2 normal? Is Troponin 0.18 dangerous?
-- Patients waste hours **searching for open pharmacies** nearby during emergencies.
-- Healthcare information is **fragmented, jargon-heavy, and inaccessible** to the average person.
-
-**HealthAI solves all of this with a single, intelligent platform.**
-
----
-
-## ✨ Features
-
-### 🧠 1. AI Symptom Checker
-- Select your symptoms from a rich database
-- Choose your age group for tailored dosage recommendations
-- Get **AI-powered diagnosis** with probable conditions, risk levels, and over-the-counter medicine suggestions available at local Indian pharmacies (e.g., Dolo-650, Combiflam, Digene)
-- Powered by the **Grok AI** language model
-
-### 📄 2. AI Medical Report Analyzer
-- Upload any **PDF or image** of a medical report (blood test, heart panel, uric acid report, etc.)
-- Automatically **extracts medical values** from the document using PyMuPDF
-- Compares extracted values against standard clinical reference ranges
-- Detects **LOW / NORMAL / HIGH** status for each parameter
-- Generates a **personalized AI health summary** with actionable advice
-- Supports: CBC, Lipid Profile, Liver Function, Kidney Function, Cardiac Markers (Troponin, BNP, CK-MB), Uric Acid, Thyroid, Diabetes Panel, and more
-
-### 🗺️ 3. Medical Store Locator
-- **Detects your live GPS location** via browser geolocation
-- Searches OpenStreetMap for real pharmacies, chemist shops, and medical stores within **5 km or 10 km** of your location
-- Shows whether each store is currently **Open or Closed** based on live opening hours data
-- Displays stores on an **interactive Leaflet map** with directions
-
-### 💊 4. Medicines Database
-- Search and browse a comprehensive database of medicines
-- View generic names, uses, and availability
-
-### 📊 5. Personal Health Dashboard
-- Track your saved pharmacies and past diagnosis history
-- Secure authentication with **NextAuth.js**
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 16, React 19, TypeScript |
-| **Styling** | Vanilla CSS, Framer Motion, Glassmorphism 3D UI |
-| **AI (Symptoms)** | Grok API (xAI) |
-| **AI (Reports)** | Python FastAPI microservice + PyMuPDF |
-| **Map & Geolocation** | OpenStreetMap, Overpass API, Leaflet.js |
-| **Database** | Prisma ORM + MongoDB Atlas |
-| **Auth** | NextAuth.js v5 |
-| **Charts** | Chart.js + React-Chartjs-2 |
-
----
-
-## 🏗️ Architecture
+A full-stack AI-powered healthcare web application. The repository is organized as a **monorepo** with three independently deployable services.
 
 ```
-Browser (Next.js Frontend, port 3000)
-    │
-    ├── /api/symptoms/analyze  ──► Grok AI API (xAI)
-    ├── /api/pharmacies        ──► OpenStreetMap Overpass API
-    ├── /api/report/upload     ──► Python FastAPI (port 8000)
-    │                                   └── PyMuPDF (text extraction)
-    │                                   └── Regex parser → ranges.json
-    └── /api/*                 ──► Prisma → MongoDB Atlas
+HealthAI/
+├── frontend/       ← Next.js 15 app  (Vercel)
+├── backend/        ← Express.js API  (Railway / Render)
+└── ai-service/     ← Python FastAPI  (Railway / Render)
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🖥 Frontend — Next.js
 
-### Prerequisites
-- Node.js 18+
-- Python 3.10+
-- MongoDB Atlas (or local MongoDB)
+> **Deploy target: Vercel**
+> Set **Root Directory** to `frontend` in Vercel project settings.
 
-### 1. Clone the repository
 ```bash
-git clone https://github.com/Shrey869/HealthAI.git
-cd HealthAI
-```
-
-### 2. Install frontend dependencies
-```bash
+cd frontend
 npm install
+npm run dev       # http://localhost:3000
+npm run build     # production build
 ```
 
-### 3. Set up environment variables
+Key env vars (create `frontend/.env`):
+```env
+DATABASE_URL=
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GEMINI_API_KEY=
+```
+
+---
+
+## ⚙️ Backend — Express.js
+
+> **Deploy target: Railway or Render**
+> Set Root Directory to `backend`.
+
 ```bash
-cp .env.example .env
-# Fill in your API keys in .env
+cd backend
+npm install
+npm start         # http://localhost:5000
 ```
 
-### 4. Set up the Python AI service
+See [`backend/README.md`](./backend/README.md) for full details.
+
+---
+
+## 🤖 AI Service — Python FastAPI
+
+> **Deploy target: Railway or Render**
+> Set Root Directory to `ai-service`.
+
 ```bash
 cd ai-service
-python -m venv venv
-
-# Windows
-.\venv\Scripts\pip install -r requirements.txt
-
-# macOS/Linux
-./venv/bin/pip install -r requirements.txt
+python -m venv venv && venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app:app --reload --port 8000   # http://localhost:8000
 ```
 
-### 5. Run the application (3 terminals)
-
-**Terminal 1 — Next.js frontend:**
-```bash
-npm run dev
-```
-
-**Terminal 2 — Python AI service:**
-```bash
-cd ai-service
-
-# Windows
-.\venv\Scripts\python app.py
-
-# macOS/Linux
-./venv/bin/python app.py
-```
-
-Open [http://localhost:3000](http://localhost:3000)
+See [`ai-service/README.md`](./ai-service/README.md) for full details.
 
 ---
 
-## 🔑 Environment Variables
+## Running Everything Locally
 
-Copy `.env.example` to `.env` and fill in the following:
+Open 3 terminals:
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | MongoDB connection string |
-| `NEXTAUTH_SECRET` | Random secret for auth sessions |
-| `NEXTAUTH_URL` | App URL (http://localhost:3000 for local) |
-| `GROK_API_KEY` | API key from [console.x.ai](https://console.x.ai) |
-| `GOOGLE_CLIENT_ID` | (Optional) For Google OAuth login |
-| `GOOGLE_CLIENT_SECRET` | (Optional) For Google OAuth login |
-
----
-
-## 🌍 Real-World Impact
-
-| Problem | HealthAI Solution |
-|---|---|
-| Can't interpret blood report values | AI Report Analyzer explains every parameter in plain language |
-| Don't know which pharmacy is open at night | Live Open/Closed status with GPS-based distance |
-| Rural users self-medicating | AI symptom checker with India-specific OTC medicine names |
-| Heart attack risk undetected | Troponin, BNP, CK-MB detection with critical alerts |
-| No access to doctors for basic queries | 24/7 AI-powered health guidance |
-
----
-
-
-
-## 👨‍💻 Team
-
-Built with ❤️ for **CodeCure — AI Hackathon** by **Team Syntax Squad** (Shreyansh Saxena)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-<div align="center">
-  <strong>⭐ If you find this useful, please star the repo!</strong>
-</div>
+| Terminal | Command |
+|----------|---------|
+| 1 | `cd frontend && npm run dev` |
+| 2 | `cd backend && npm start` |
+| 3 | `cd ai-service && uvicorn app:app --reload --port 8000` |
