@@ -59,7 +59,10 @@ export async function searchPlacesOSM(
     const response = await fetch(OVERPASS_URL, {
       method: "POST",
       body: `data=${encodeURIComponent(overpassQuery)}`,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      headers: { 
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "HealthAI/1.0 (Contact: admin@example.com)"
+      }
     })
 
     if (!response.ok) {

@@ -38,7 +38,7 @@ export default function PharmaciesPage() {
   const [selectedType, setSelectedType] = useState("All Types")
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid")
   const [showMap, setShowMap] = useState(true)
-  const [radius, setRadius] = useState("5")
+  const [radius, setRadius] = useState("15")
   const [pharmacies, setPharmacies] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const { location: userLocation, loading: geoLoading } = useGeolocation()
@@ -175,6 +175,9 @@ export default function PharmaciesPage() {
                   <SelectContent>
                     <SelectItem value="5">5 km</SelectItem>
                     <SelectItem value="10">10 km</SelectItem>
+                    <SelectItem value="15">15 km</SelectItem>
+                    <SelectItem value="25">25 km</SelectItem>
+                    <SelectItem value="50">50 km</SelectItem>
                   </SelectContent>
                 </Select>
 
