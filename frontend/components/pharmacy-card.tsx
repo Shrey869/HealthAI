@@ -14,6 +14,8 @@ export interface Pharmacy {
   distance: string
   image?: string
   available: boolean
+  lat?: number
+  lng?: number
 }
 
 interface PharmacyCardProps {
@@ -83,7 +85,20 @@ export function PharmacyCard({ pharmacy, onSave }: PharmacyCardProps) {
             <Heart className="h-4 w-4 mr-2" />
             Save
           </Button>
-          <Button className="flex-1" size="sm" onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${pharmacy.name} ${pharmacy.hospital}`)}`, '_blank')}>
+          <Button 
+            className="flex-1" 
+            size="sm" 
+            onClick={() => {
+              if (pharmacy.lat && pharmacy.lng) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.lat},${pharmacy.lng}`, '_blank');
+              } else {
+                const searchString = pharmacy.hospital === "Unknown Address" 
+                  ? pharmacy.name 
+                  : `${pharmacy.name} ${pharmacy.hospital}`;
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchString)}`, '_blank');
+              }
+            }}
+          >
             <Navigation className="h-4 w-4 mr-2" />
             Get Directions
           </Button>

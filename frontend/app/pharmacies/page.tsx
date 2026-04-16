@@ -112,6 +112,8 @@ export default function PharmaciesPage() {
     hospital: p.hospital,
     distance: (p.distance !== undefined && p.distance !== null) ? `${p.distance.toFixed(1)} km` : "N/A",
     available: p.available,
+    lat: p.geometry?.location?.lat || p.lat,
+    lng: p.geometry?.location?.lng || p.lng,
   }))
 
   return (
