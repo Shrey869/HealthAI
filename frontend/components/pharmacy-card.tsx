@@ -85,29 +85,18 @@ export function PharmacyCard({ pharmacy, onSave }: PharmacyCardProps) {
             <Heart className="h-4 w-4 mr-2" />
             Save
           </Button>
-          {pharmacy.lat && pharmacy.lng ? (
-            <Button className="flex-1" size="sm" asChild>
-              <a 
-                href={`https://www.google.com/maps/dir/?api=1&destination=${pharmacy.lat},${pharmacy.lng}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <Navigation className="h-4 w-4 mr-2" />
-                Get Directions
-              </a>
-            </Button>
-          ) : (
-            <Button className="flex-1" size="sm" asChild>
-              <a 
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${pharmacy.name} ${pharmacy.hospital !== 'Unknown Address' ? pharmacy.hospital : ''}`.trim())}`}
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <Navigation className="h-4 w-4 mr-2" />
-                Get Directions
-              </a>
-            </Button>
-          )}
+          <a 
+            href={pharmacy.lat && pharmacy.lng 
+              ? `https://www.google.com/maps/dir/?api=1&destination=${pharmacy.lat},${pharmacy.lng}`
+              : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${pharmacy.name} ${pharmacy.hospital !== 'Unknown Address' ? pharmacy.hospital : ''}`.trim())}`
+            }
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3"
+          >
+            <Navigation className="h-4 w-4 mr-2" />
+            Get Directions
+          </a>
         </div>
       </CardContent>
     </Card>
