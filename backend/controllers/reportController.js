@@ -15,8 +15,10 @@ const uploadReport = async (req, res) => {
     formData.append('file', fileBuffer, fileName);
 
     // Call AI Service
-    // We assume the FastAPI service runs on port 8000
-    const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000/analyze-report';
+    const AI_BASE = (process.env.AI_SERVICE_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+    const aiServiceUrl = `${AI_BASE}/analyze-report`;
+    console.log(`[reportController] POST ${aiServiceUrl}`);
+
     
     const response = await axios.post(aiServiceUrl, formData, {
       headers: {

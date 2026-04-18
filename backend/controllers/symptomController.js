@@ -1,5 +1,9 @@
 const axios = require('axios');
 
+// AI_SERVICE_BASE_URL = base URL of the Python FastAPI service, no trailing slash
+// e.g. https://healthai-ai.onrender.com
+const AI_BASE = (process.env.AI_SERVICE_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+
 const analyzeSymptoms = async (req, res) => {
   try {
     const { symptoms, ageGroup } = req.body;
@@ -8,26 +12,25 @@ const analyzeSymptoms = async (req, res) => {
       return res.status(400).json({ error: 'At least one symptom is required' });
     }
 
-    // Forward to Python FastAPI service
-    const aiServiceUrl = process.env.AI_SERVICE_URL
-      ? process.env.AI_SERVICE_URL.replace('/analyze-report', '/analyze-symptoms')
-      : 'http://127.0.0.1:8000/analyze-symptoms';
+    const url = `${AI_BASE}/analyze-symptoms`;
+    console.log(`[symptomController] POST ${url}`);
 
-    const response = await axios.post(aiServiceUrl, {
+    const response = await axios.post(url, {
       symptoms,
       ageGroup: ageGroup || 'Adult',
     }, {
       headers: { 'Content-Type': 'application/json' },
-      timeout: 15000,
+      timeout: 30000,
     });
 
     return res.status(200).json(response.data);
 
   } catch (error) {
-    console.error('Error in analyzeSymptoms:', error?.response?.data || error.message);
+    const detail = error?.response?.data || error.message;
+    console.error('[symptomController] Error:', detail);
     return res.status(500).json({
       error: 'Failed to analyze symptoms',
-      details: error?.response?.data || error.message,
+      details: detail,
     });
   }
 };
