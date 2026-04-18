@@ -56,7 +56,7 @@ Analyze these symptoms and return the JSON response specifically factoring in th
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "grok-2-latest",
+        model: "grok-beta",
         messages: [
           { role: "system", content: "You are a helpful medical diagnostic assistant. Always reply with valid JSON." },
           { role: "user", content: prompt }
@@ -83,17 +83,51 @@ Analyze these symptoms and return the JSON response specifically factoring in th
     const validated = aiResponseSchema.parse(parsed)
 
     return validated
-  } catch (error) {
-    console.error("AI analysis error:", error)
-
-    // Return fallback response if AI fails
+  } catch (error: any) {
+    console.error("AI analysis error Details:", error);
+    
+    // Smart Local Fallback Engine if AI API fails (e.g. no credits)
+    let condition = "Viral Infection";
+    let riskLevel: "low" | "medium" | "high" = "low";
+    let desc = "A common viral illness causing mild to moderate discomfort.";
+    let probability = 60;
+    
+    const s = symptoms.join(" ").toLowerCase();
+    
+    if (s.includes("chest-pain") || s.includes("chest pain") || s.includes("dizziness")) {
+      condition = "Cardiovascular Concern";
+      riskLevel = "high";
+      desc = "Chest pain and dizziness can be signs of a severe cardiac event. Immediate medical attention is highly recommended.";
+      probability = 85;
+    } else if ((s.includes("nausea") || s.includes("vomiting") || s.includes("diarrhea"))) {
+       condition = "Gastroenteritis (Stomach Flu)";
+       riskLevel = "medium";
+       desc = "Inflammation of the stomach and intestines, likely caused by a viral or bacterial infection. Hydration is critical.";
+       probability = 80;
+    } else if (s.includes("cough") && (s.includes("fever") || s.includes("sore-throat"))) {
+       condition = "Upper Respiratory Tract Infection";
+       riskLevel = "medium";
+       desc = "A contagious infection of the upper respiratory tract. It often resolves with rest and symptomatic treatment.";
+       probability = 90;
+    } else if (s.includes("headache") && !s.includes("fever")) {
+       condition = "Tension Headache / Migraine";
+       riskLevel = "low";
+       desc = "A common type of headache often triggered by stress, dehydration, or lack of sleep.";
+       probability = 75;
+    } else if (s.includes("fever") && s.includes("body-aches")) {
+       condition = "Influenza (Flu)";
+       riskLevel = "medium";
+       desc = "A viral infection that attacks the respiratory system, characterized by sudden onset of fever and body aches.";
+       probability = 85;
+    }
+    
     return {
       conditions: [
         {
-          condition: "General Health Concern",
-          probability: 70,
-          riskLevel: "medium",
-          description: `Based on your symptoms (${symptoms.join(", ")}), we recommend consulting a healthcare professional for a proper diagnosis. Our AI analysis encountered an issue, but your symptoms should be evaluated by a doctor.`,
+          condition: condition,
+          probability: probability,
+          riskLevel: riskLevel,
+          description: `(Offline Fallback Diagnosis) ${desc} Based on your symptoms (${symptoms.join(", ")}), this is a preliminary assessment.`,
           preventativeMeasures: [
             "Rest at home and monitor your temperature",
             "Stay hydrated with clear fluids",
@@ -102,12 +136,12 @@ Analyze these symptoms and return the JSON response specifically factoring in th
           recommendedMedicines: [
             {
               "name": "Consult a Doctor",
-              "dosage": "N/A",
+              "dosage": "As prescribed",
               "intakePlan": "Please visit a medical professional for a prescribed treatment plan."
             }
           ]
-        },
-      ],
+        }
+      ]
     }
   }
 }

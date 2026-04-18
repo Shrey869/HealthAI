@@ -39,7 +39,7 @@ export default function SymptomsPage() {
         throw new Error(data.error || "Analysis failed")
       }
 
-      // Store results in sessionStorage and navigate
+      // Store full engine result in sessionStorage and navigate
       sessionStorage.setItem("diagnosisResult", JSON.stringify(data.data))
       router.push(`/diagnosis?id=${data.data.id || "latest"}`)
     } catch (error) {

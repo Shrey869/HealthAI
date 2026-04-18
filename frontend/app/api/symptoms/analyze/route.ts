@@ -2,8 +2,9 @@ import { NextRequest } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { symptomAnalysisSchema } from "@/lib/validations"
-import { analyzeSymptoms } from "@/lib/ai"
-import { successResponse, handleApiError, ApiError } from "@/lib/api-utils"
+import { successResponse, handleApiError } from "@/lib/api-utils"
+
+const BACKEND_URL = process.env.BACKEND_URL || "http://127.0.0.1:5000"
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +13,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { symptoms, ageGroup } = symptomAnalysisSchema.parse(body)
 
-    // Call AI for analysis
-    const aiResult = await analyzeSymptoms(symptoms, ageGroup)
+    // Forward to Express → FastAPI symptom engine
+    const res = await fetch(`${BACKEND_URL}/api/symptoms/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ symptoms, ageGroup }),
+    })
+
+    if (!res.ok) {
+      const errBody = await res.text()
+      throw new Error(`Symptom engine error: ${res.status} — ${errBody}`)
+    }
+
+    const engineResult = await res.json()
 
     // Store diagnosis if user is authenticated
     let diagnosisId: string | null = null
@@ -22,7 +34,7 @@ export async function POST(request: NextRequest) {
         data: {
           userId: session.user.id,
           symptoms,
-          conditions: aiResult.conditions as any,
+          conditions: engineResult as any,
         },
       })
       diagnosisId = diagnosis.id
@@ -31,7 +43,7 @@ export async function POST(request: NextRequest) {
     return successResponse({
       id: diagnosisId,
       symptoms,
-      conditions: aiResult.conditions,
+      ...engineResult,
     })
   } catch (error) {
     return handleApiError(error)

@@ -27,7 +27,30 @@ export const searchSchema = z.object({
   radius: z.coerce.number().optional().default(10),
 })
 
-// AI response validation
+// ── New Symptom Engine response schemas ──────
+
+export const otcRecommendationSchema = z.object({
+  medicine: z.string(),
+  purpose: z.string(),
+  dose_guidance: z.string(),
+})
+
+export const conditionSchema = z.object({
+  condition: z.string(),
+  severity: z.string(),
+  description: z.string(),
+})
+
+export const symptomEngineResponseSchema = z.object({
+  conditions: z.array(conditionSchema).min(1),
+  severity: z.enum(["Mild", "Moderate", "Severe"]),
+  recommendations: z.array(otcRecommendationSchema),
+  safety_warnings: z.array(z.string()),
+  dosage_note: z.string().nullable().optional(),
+  disclaimer: z.string(),
+})
+
+// Legacy AI response schemas (kept for backward compat with old data)
 export const aiConditionSchema = z.object({
   condition: z.string(),
   probability: z.number().min(0).max(100),
@@ -50,5 +73,9 @@ export const aiResponseSchema = z.object({
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>
 export type SymptomAnalysisInput = z.infer<typeof symptomAnalysisSchema>
+export type OTCRecommendation = z.infer<typeof otcRecommendationSchema>
+export type Condition = z.infer<typeof conditionSchema>
+export type SymptomEngineResponse = z.infer<typeof symptomEngineResponseSchema>
 export type AICondition = z.infer<typeof aiConditionSchema>
 export type AIResponse = z.infer<typeof aiResponseSchema>
+
